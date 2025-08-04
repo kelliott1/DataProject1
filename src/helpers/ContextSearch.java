@@ -10,6 +10,7 @@ public class ContextSearch {
      * @param baseName the base name of the book (without extension)
      */
 
+    // Binary search through a sorted list of words
     public static int binarySearch(String[] list, String target) {
         int low = 0;
         int high = list.length - 1;
@@ -35,11 +36,12 @@ public class ContextSearch {
         String indexPath = "src/books/" + baseName + ".txt_index.txt";
         String wordsPath = "src/books/" + baseName + ".txt_words.txt";
 
-        String[] searchWords;
-        String[] indexStrings;
-        String[] originalWords;
+        String[] searchWords; // List of indexed words
+        String[] indexStrings; // Index line (positions) for each word
+        String[] originalWords; // Full word list in order
 
         try {
+            // Load the index file
             Scanner indexReader = new Scanner(new File(indexPath));
             int uniqueWordCount = indexReader.nextInt();
             indexReader.nextLine();
@@ -50,18 +52,19 @@ public class ContextSearch {
             for (int i = 0; i < uniqueWordCount; i++) {
                 String line = indexReader.nextLine();
                 int space = line.indexOf(" ");
-                searchWords[i] = line.substring(0, space);
-                indexStrings[i] = line.substring(space + 1);
+                searchWords[i] = line.substring(0, space); // word
+                indexStrings[i] = line.substring(space + 1); // index list
             }
             indexReader.close();
 
+            // Load the original word file
             Scanner wordReader = new Scanner(new File(wordsPath));
             int totalWords = wordReader.nextInt();
             originalWords = new String[totalWords];
 
             for (int i = 0; i < totalWords; i++) {
                 if (wordReader.hasNext()) {
-                    originalWords[i] = wordReader.next(); // word
+                    originalWords[i] = wordReader.next(); // grab word
                     wordReader.nextInt(); // skip index
                 }
             }
@@ -72,6 +75,7 @@ public class ContextSearch {
             return;
         }
 
+        // prompt for words to search
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.print("Enter a word (or 'exit' to quit): ");
@@ -82,12 +86,14 @@ public class ContextSearch {
                 break;
             }
 
+            // Search for the word in the index
             int result = binarySearch(searchWords, query);
             if (result == -1) {
                 System.out.println("Can't find " + query + " in the text");
                 continue;
             }
 
+            // Get positions and show 5 word context for each
             String[] positions = indexStrings[result].split(" ");
             for (String pos : positions) {
                 int idx = Integer.parseInt(pos);

@@ -22,6 +22,7 @@ public class Sorter {
         long startTime = System.currentTimeMillis();
 
         try {
+            // Read words and their original indices from the input file
             Scanner in = new Scanner(new File(inputPath));
             int wordCount = in.nextInt();
 
@@ -34,8 +35,10 @@ public class Sorter {
             }
             in.close();
 
+            // Sort the words alphabetically using merge sort
             mergeSort(words, indices, 0, wordCount - 1);
 
+            // Write the sorted words and their original indices to the output file
             PrintWriter writer = new PrintWriter(new FileWriter(outputPath));
             writer.println(wordCount);
             for (int i = 0; i < wordCount; i++) {
@@ -45,7 +48,7 @@ public class Sorter {
 
             long endTime = System.currentTimeMillis();
             System.out.println("Merge sort completed in " + (endTime - startTime) + " ms\n");
-            // System.out.println(outputPath + " created.");
+            System.out.println(outputPath + " created.");
 
             return endTime - startTime;
 
@@ -55,6 +58,7 @@ public class Sorter {
         }
     }
 
+    // Recursive merge sort for strings with parallel index tracking
     private static void mergeSort(String[] words, int[] indices, int left, int right) {
         if (left >= right)
             return;
@@ -65,6 +69,7 @@ public class Sorter {
         merge(words, indices, left, mid, right);
     }
 
+    // Merge two sorted halves into a combined sorted section
     private static void merge(String[] words, int[] indices, int left, int mid, int right) {
         int size = right - left + 1;
         String[] tempWords = new String[size];
@@ -72,6 +77,7 @@ public class Sorter {
 
         int i = left, j = mid + 1, k = 0;
 
+        // Copy any remaining items from the left half
         while (i <= mid && j <= right) {
             if (words[i].compareTo(words[j]) <= 0) {
                 tempWords[k] = words[i];
@@ -85,6 +91,7 @@ public class Sorter {
             k++;
         }
 
+        // Copy any remaining items from the right half
         while (i <= mid) {
             tempWords[k] = words[i];
             tempIndices[k] = indices[i];
@@ -99,6 +106,7 @@ public class Sorter {
             k++;
         }
 
+        // Write the sorted section back into the original arrays
         for (int m = 0; m < size; m++) {
             words[left + m] = tempWords[m];
             indices[left + m] = tempIndices[m];

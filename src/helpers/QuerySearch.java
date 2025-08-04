@@ -9,10 +9,14 @@ public class QuerySearch {
      *
      * @param baseName the base name of the book (without extension)
      */
+
+    // Loaded from the index file
     private static String[] words;
     private static String[] indexLines;
+    // Loaded from the original word list
     private static String[] originalText;
 
+    // Reads the index file and splits it into words and their index lines
     private static void loadIndex(String baseName) {
         String inputPath = "src/books/" + baseName + ".txt_index.txt";
 
@@ -27,8 +31,8 @@ public class QuerySearch {
             for (int i = 0; i < count; i++) {
                 String line = reader.nextLine();
                 int space = line.indexOf(" ");
-                words[i] = line.substring(0, space);
-                indexLines[i] = line.substring(space + 1);
+                words[i] = line.substring(0, space); // Word itself
+                indexLines[i] = line.substring(space + 1); // List of positions
             }
 
             reader.close();
@@ -37,6 +41,7 @@ public class QuerySearch {
         }
     }
 
+    // Reads the word list file and stores the words in order
     private static void loadOriginal(String baseName) {
         String path = "src/books/" + baseName + ".txt_words.txt";
 
@@ -48,7 +53,7 @@ public class QuerySearch {
 
             for (int i = 0; i < count; i++) {
                 if (reader.hasNext()) {
-                    originalText[i] = reader.next();
+                    originalText[i] = reader.next(); // Get word
                     reader.nextInt(); // skip index
                 }
             }
@@ -59,6 +64,7 @@ public class QuerySearch {
         }
     }
 
+    // Binary search for a word in the sorted index
     private static int binarySearch(String[] list, String target) {
         int start = 0;
         int end = list.length - 1;
@@ -68,7 +74,7 @@ public class QuerySearch {
             int compare = list[middle].compareTo(target);
 
             if (compare == 0) {
-                return middle;
+                return middle; // Found it
             } else if (compare < 0) {
                 start = middle + 1;
             } else {
@@ -82,8 +88,8 @@ public class QuerySearch {
     public static void main(String[] args) {
 
         String baseName = args[0];
-        loadIndex(baseName);
-        loadOriginal(baseName);
+        loadIndex(baseName); // Load word-to-index mapping
+        loadOriginal(baseName); // Load full text in word order
 
         Scanner scanner = new Scanner(System.in);
 
@@ -95,13 +101,15 @@ public class QuerySearch {
                 break;
             }
 
-            int result = binarySearch(words, word);
+            int result = binarySearch(words, word); // Search the index
 
             if (result == -1) {
                 System.out.println("Can't find " + word + " in the text");
             } else {
+                // Show index info for the word
                 System.out.println(word + ": " + indexLines[result]);
 
+                // For each index the word appeared at, show surrounding words
                 String[] parts = indexLines[result].split(" ");
 
                 for (String part : parts) {
@@ -114,7 +122,7 @@ public class QuerySearch {
                         }
                     }
 
-                    System.out.println();
+                    System.out.println(); // Line break after each context block
                 }
             }
         }

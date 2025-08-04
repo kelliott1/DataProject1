@@ -21,6 +21,7 @@ public class WordIndexer {
         long startTime = System.currentTimeMillis();
 
         try {
+            // First pass: count how many words are in the file
             Scanner counter = new Scanner(new File(inputPath));
             int totalWords = 0;
 
@@ -30,6 +31,7 @@ public class WordIndexer {
             }
             counter.close();
 
+            // Second pass: read all words into an array
             Scanner reader = new Scanner(new File(inputPath));
             String[] words = new String[totalWords];
             for (int i = 0; i < totalWords && reader.hasNext(); i++) {
@@ -37,6 +39,7 @@ public class WordIndexer {
             }
             reader.close();
 
+            // Write total word count and each word with its index to the output file
             PrintWriter writer = new PrintWriter(new FileWriter(outputPath));
             writer.println(totalWords);
             for (int i = 0; i < totalWords; i++) {

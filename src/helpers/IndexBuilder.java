@@ -25,16 +25,18 @@ public class IndexBuilder {
             PrintWriter out = new PrintWriter(new FileWriter(outputPath));
 
             int totalWords = in.nextInt();
-            in.nextLine(); // skip to next line
+            in.nextLine(); // skip the rest of the line after the word count
 
             String previousWord = "";
             int uniqueCount = 0;
             StringBuilder line = new StringBuilder();
 
+            // Go through each word-index pair in the sorted file
             for (int i = 0; i < totalWords; i++) {
                 String word = in.next();
                 int index = in.nextInt();
 
+                // If the word changes, write the previous group
                 if (!word.equals(previousWord)) {
                     if (!previousWord.equals("")) {
                         out.println(line.toString());
@@ -43,10 +45,12 @@ public class IndexBuilder {
                     previousWord = word;
                     uniqueCount++;
                 } else {
+                    // If the word is the same, add the new index
                     line.append(" ").append(index);
                 }
             }
 
+            // Write the last line after loop ends
             out.println(line.toString());
 
             in.close();
@@ -66,7 +70,7 @@ public class IndexBuilder {
             writer.print(full.toString());
             writer.close();
 
-            // System.out.println("Index created. Duplicate words are grouped together.");
+            System.out.println("Index created. Duplicate words are grouped together.");
 
         } catch (Exception e) {
             System.out.println("Fix your error: " + e.getMessage());
