@@ -64,9 +64,9 @@ public class Sorter {
             return;
 
         int mid = (left + right) / 2;
-        mergeSort(words, indices, left, mid);
-        mergeSort(words, indices, mid + 1, right);
-        merge(words, indices, left, mid, right);
+        mergeSort(words, indices, left, mid); // left half
+        mergeSort(words, indices, mid + 1, right); // right half
+        merge(words, indices, left, mid, right); // merge the two halves
     }
 
     // Merge two sorted halves into a combined sorted section

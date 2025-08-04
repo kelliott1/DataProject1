@@ -112,7 +112,8 @@ public class QuerySearch {
                 // For each index the word appeared at, show surrounding words
                 String[] parts = indexLines[result].split(" ");
 
-                for (String part : parts) {
+                for (int j = 0; j < parts.length; j++) {
+                    String part = parts[j];
                     int index = Integer.parseInt(part);
                     System.out.print(index + ": ");
 
@@ -124,6 +125,7 @@ public class QuerySearch {
 
                     System.out.println(); // Line break after each context block
                 }
+
             }
         }
 

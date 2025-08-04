@@ -27,7 +27,7 @@ public class ContextSearch {
                 high = mid - 1;
         }
 
-        return -1;
+        return -1; // loop ended without finding the word
     }
 
     public static void main(String[] args) {
@@ -93,9 +93,10 @@ public class ContextSearch {
                 continue;
             }
 
-            // Get positions and show 5 word context for each
+            // For each loc the word appears, print its pos & two words before/after
             String[] positions = indexStrings[result].split(" ");
-            for (String pos : positions) {
+            for (int j = 0; j < positions.length; j++) {
+                String pos = positions[j];
                 int idx = Integer.parseInt(pos);
                 System.out.print(idx + ": ");
 
@@ -106,6 +107,7 @@ public class ContextSearch {
                 }
                 System.out.println();
             }
+
         }
 
         scanner.close();
